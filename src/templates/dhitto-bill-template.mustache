@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Invoice</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: poppins, sans-serif;
+        font-size: 12px;
+      }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing:border-box;
+        }
+
+      .invoice-container {
+        max-width: 800px;
+        margin: auto;
+        border: 1px solid #ccc;
+        padding: 20px;
+        box-sizing: border-box;
+      }
+
+      .section {
+        border-bottom: 1px solid #ccc;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+        position: relative;
+      }
+
+      .table-container {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      .table-container ,
+      .tableHead,
+      .tableData {
+        border: 1px solid #ccc;
+      }
+      .tableHead,
+      .tableData {
+        padding: 8px;
+        text-align: left;
+      }
+
+      .grand-total {
+        text-align: right;
+        margin-top: 10px;
+      }
+
+      .terms-conditions {
+        margin-top: 10px;
+      }
+
+      .from-to-container  {
+       display: flex;
+                        font-size: 15px;
+
+            justify-content: space-between;
+      }
+
+      .logo-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+      }
+      .logo {
+        object-fill: cover;
+        height: 100%;  
+        width: 200px;  
+        }
+        .logo10 {
+          object-fill: cover;
+         width: 120px;
+         height: 50%;  
+
+      }
+      .customer-details {
+        display: flex;
+        justify-content: space-between;
+      }
+
+    
+
+      
+      .footer {
+        border-top: 1px solid #ccc;
+        padding-top: 10px;
+        margin-top: 20px;
+        text-align: right;
+      }
+
+      .footer p {
+        margin: 0;
+        display: inline-block;
+      }
+      .end-line {
+        display: flex;
+        flex-direction: row;
+        gap: 75%;
+      }
+
+      @media print {
+            .invoice-container {
+                max-width: 100% !important;
+                width: 100% !important;
+            }
+               /* Set the page size to A4 */
+        @page {
+          size: A4;
+          margin: 0;
+        }
+
+        /* Optional: Add any additional styling for printing */
+        body {
+          margin: 1cm; /* Adjust margins as needed */
+        }
+        }
+          .customerplaceholder{
+           margin-top:20px;
+            font-size:15px;
+            display:flex;
+            justify-content:space-between;
+        }
+          .detailsplaceholder{
+           margin-top:10px;
+            font-size:15px;
+            display:flex;
+            justify-content:space-between;
+        }
+         .header{
+            display:flex;
+            justify-content:space-between;
+        }
+
+
+    </style>
+  </head>
+
+  <body>
+    <div class="invoice-container">
+      <!-- Official Copy Section -->
+             <div class='section'>
+
+       <div class='header'>
+         <div class='customer'>
+            <h1>Loan Invoice</h1>
+            <hr>
+            <div class="from-to-container">
+                <div>
+                    <p><b>{{user.fullName}}</b></p>
+                    <p>{{user.address}}</p>
+                    <p>Pan: {{user.pan}}</p>
+                </div>
+                
+            </div>
+            <hr>
+
+            </div>
+
+        <!-- From and To -->
+
+         <div class="logo-container">
+                <img src="https://bravelender.com/assets/images/bravelender-logo.png" alt="Company Logo" class="logo">
+            </div>
+
+            </div>
+
+          <div class='customerplaceholder'>
+                    <p>Name: {{customer.fullName}}</p>
+                    <p>Address: {{customer.address}}</p>
+                    <p>Contact: {{customer.phoneNumber}}</p>
+                </div>
+
+              <div class='detailsplaceholder'>
+                    <p>Invoice Id : {{product.id}}</p>
+                    <p>Date: {{product.date}}</p>
+                </div>
+
+        <!-- Table -->
+        <table class="table-container">
+          <thead>
+            <tr>
+              <th class="tableHead">Id.</th>
+              <th class="tableHead">Product Name</th>
+              <th class="tableHead">Princpal Amount (Rs.)</th>
+              <th class="tableHead">Interest Rate(%)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class='tableData'>{{product.id}}</td>
+              <td class='tableData'>{{product.productName}}</td>
+              <td class='tableData'>{{product.principalAmount}}</td>
+              <td class='tableData'>{{product.interestPercentage}}</td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- Amounts in Words -->
+        {{! <p id="amount-in-words" class="terms-conditions">
+          Amount in Words: Zero dollars and zero cents
+        </p> }}
+        <div class="terms-conditions">
+          <p>Note: Interest must be paid within 3 months from the date of storing the goods. If interest is not paid within 3 months, the goods must be reclaimed. Otherwise, if the goods are not reclaimed within 6 months, they will be sold to recover the dues.</p>
+        </div>
+      </div>
+      <div class="end-line">
+        <div>
+          <p>{{customer.fullName}}</p>
+          <hr />
+          Received by
+        </div>
+        <div>
+          <img src="https://bravelender.com/assets/images/bravelender-logo.png" alt="Company Logo" class="logo10">
+          Authorized by
+        </div>
+      </div>
+    </div>
+
+  </body>
+   <script>
+     print();
+    </script>
+
+</html>

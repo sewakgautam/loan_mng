@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "BankRecord" ALTER COLUMN "identity" DROP NOT NULL,
+ALTER COLUMN "updatedAt" DROP DEFAULT;

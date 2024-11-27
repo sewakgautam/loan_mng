@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Invoice</title>
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+      <link
+         href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap"
+         rel="stylesheet"
+         />
+      <style>
+         body {
+         font-family: poppins, sans-serif;
+         font-size: 12px;
+         }
+         * {
+            margin: 0;
+            padding: 0;
+            box-sizing:border-box;
+        }
+         .invoice-container {
+         max-width: 800px;
+         margin: auto;
+         border: 1px solid #ccc;
+         padding: 20px;
+         box-sizing: border-box;
+         }
+         .section {
+         position: relative;
+         border-bottom: 1px solid #ccc;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+         }
+         .table-container {
+         width: 100%;
+         border-collapse: collapse;
+         margin-top: 20px;
+         }
+         .table-container,
+         .tableHead,
+         .tableData {
+         border: 1px solid #ccc;
+         }
+         .tableHead,
+         .tableData {
+         padding: 8px;
+         text-align: left;
+         }
+         .grand-total {
+         text-align: right;
+         margin-top: 10px;
+         }
+         .terms-conditions {
+         }
+         .from-to-container p{
+         text-align: center;
+         }
+         .logo-container {
+         display: flex;
+         flex-direction: row;
+         justify-content: space-between;
+         }
+         .customer-details {
+         display: flex;
+         justify-content: space-between;
+         }
+         .logo {
+         object-fill: cover;
+         width: 150px;
+         height: 100%;
+         }
+         .end-line {
+         display: flex;
+         flex-direction: row;
+         justify-content: space-between;
+         width: 100%;
+         text-align: center;
+         gap: 100px;
+         }
+         .second-table{
+         display: flex;
+         flex-direction: row;
+         justify-content: space-between;
+         }
+         .end-line p{
+         padding-top:10px;
+         border-top: 1px solid black;
+         width: 100px;
+         }
+
+         @media print {
+          @page {
+                size: A4;
+                margin: 0;
+            }
+
+            /* Optional: Add any additional styling for printing */
+            body {
+                margin: 0.5cm; /* Adjust margins as needed */
+            }
+
+         }
+      </style>
+   </head>
+   <body>
+      <div class="invoice-container">
+      <!-- Official Copy Section -->
+      <div class="section">
+         <div class="logo-container">
+            <img
+               src="https://bravelender.com/assets/images/bravelender-logo.png"
+               alt="Company Logo"
+               class="logo"
+               />
+               <div class="firstcontainer">
+                  <p>Date: {{product.date}}</p>
+                  <p>
+                  <strong>
+                  Payment Invoice 
+                  </strong>
+                  </p>
+                  <p>Invoice Id :{{product.id}}</p>
+               </div>
+
+         </div>
+                    <p><b>{{user.fullName}}</b></p>
+                    <p>{{user.address}}</p>
+                    <p>Pan: {{user.pan}}</p>
+         <div class="customer-details">
+            <p>Name of Customer: {{customer.fullName}}</p>
+            <p>Address: {{customer.address}}</p>
+            <p>Phone number: {{customer.phoneNumber}}</p>
+         </div>
+         <!-- Table -->
+         <table class="table-container">
+            <thead>
+               <tr>
+                  <th class="tableHead">SN.</th>
+                  <th class="tableHead">Description</th>
+                  <th class="tableHead">Principal paid</th>
+                  <th class="tableHead">Interest paid</th>
+                  <th class="tableHead">Total</th>
+               </tr>
+            </thead>
+            <tbody>
+               <tr>
+                  <td class="tableData">{{product.id}}</td>
+                  <td class="tableData">{{product.name}}</td>
+                  <td class="tableData">{{product.principalPayed}}</td>
+                  <td class="tableData">{{product.interestPayed}}</td>
+                  <td class="tableData">{{product.amount}}</td>
+               </tr>
+            </tbody>
+         </table>
+         <!-- Amounts in Words -->
+         <div class="second-table">
+            <div style="display: flex; justify-content: space-between; flex-direction: column;">
+               <p id="amount-in-words" class="terms-conditions">
+                  Amount in Words: {{product.amountInWords}}
+               </p>
+               <div class="end-line">
+                  <p>
+                     Received by
+                  </p>
+                  <p>
+                     Authorized by
+                  </p>
+               </div>
+            </div>
+            <div class="terms-conditions">
+               <table class="table-container">
+                  <tr>
+                     <td>Principal to be paid</td>
+                     <td>Rs.{{principalRemain}}</td>
+                  </tr>
+                  <tr>
+                     <td>Interest to be paid</td>
+                     <td>Rs.{{interestRemain}}</td>
+                  </tr>
+                  <tr>
+                     <td>Total to be paid</td>
+                     <td>Rs.{{totalRemain}}</td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+      </div>
+      <script>
+         print();
+      </script>
+   </body>
+</html>

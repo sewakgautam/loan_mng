@@ -1,0 +1,179 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  CLIENT
+  ADMIN
+}
+
+// User is considered as super user
+model User {
+  id          String     @id @default(uuid())
+  username    String     @unique
+  phoneNumber String     @unique
+  fullName    String
+  email       String     @unique
+  password    String
+  role        UserRole   @default(CLIENT)
+  customers   Customer[]
+  saleUsers   SaleUser[]
+  logo        String
+  address     String
+  pan         String
+  Bank        Bank[]
+}
+
+model Customer {
+  id             String   @id @default(uuid())
+  phoneNumber    String   @unique
+  altPhoneNumber String?
+  fullName       String
+  address        String
+  dhitto         Dhitto[]
+  image          String // base64
+  email          String?  @unique
+
+  createdAt DateTime @default(now())
+  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+
+  identity Int @default(autoincrement())
+}
+
+model Dhitto {
+  id                 String              @id @default(uuid())
+  principalAmount    Float
+  interestPercentage Float // in percent
+  date               DateTime            @default(now())
+  bsDate             String
+  productName        String
+  Customer           Customer?           @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  customerId         String?
+  statements         DhittoStatement[]
+  // conversionPeriod   DateTime            @default(now()) @db.Timestamp()
+  DhittoAccumulation DhittoAccumulation?
+  status             DhittoStatus        @default(SAFE)
+  Lilami             Lilami?
+
+  createdAt DateTime @default(now())
+}
+
+model DhittoAccumulation {
+  id           String @id @default(uuid())
+  accPrincipal Float
+  accInterest  Float
+  dhitto       Dhitto @relation(fields: [dhittoId], references: [id], onDelete: Cascade)
+  dhittoId     String @unique
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime // last payed date
+  accumTill DateTime? // accumulated till date
+}
+
+model DhittoStatement {
+  id       String  @id @default(uuid())
+  remark   String
+  debit    Float
+  credit   Float
+  interest Float
+  Dhitto   Dhitto  @relation(fields: [dhittoId], references: [id], onDelete: Cascade)
+  dhittoId String
+  bsDate   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
+}
+
+model Bank {
+  id      String @id @default(uuid()) // bank id
+  name    String
+  address String
+
+  User   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  bankRecords BankRecord[]
+}
+
+model BankRecord {
+  id          String           @id @default(uuid())
+  productName String
+  bsDate      String
+  status      BankRecordStatus
+
+  createdDate DateTime @default(now())
+  createdAt   DateTime @default(now())
+  Bank        Bank     @relation(fields: [bankId], references: [id], onDelete: Cascade)
+  bankId      String
+  claimCode   String
+
+  updatedAt DateTime? @updatedAt()
+  identity  Int?      @default(autoincrement())
+}
+
+enum BankRecordStatus {
+  ON_BANK
+  RECEIVED
+}
+
+enum DhittoStatus {
+  LILAMI
+  SAFE // todo: ? will put this as the same for no-breaking things
+  SETTLED
+}
+
+model SaleUser {
+  id            String     @id @default(uuid())
+  address       String
+  contactNumber String
+  fullName      String
+  panNo         String
+  date          DateTime   @default(now())
+  bsDate        String
+  saleGoods     SaleGood[]
+
+  User   User   @relation(fields: [userId], references: [id])
+  userId String
+
+  @@index([date], type: Hash)
+}
+
+model SaleGood {
+  id          Int    @id @default(autoincrement())
+  description String
+
+  rate         Float
+  weight       Float
+  makingCharge Float
+
+  amount  Float // per gram rate * weight
+  total   Float // amount + mfg.cost + making cost
+  mfgCost Float
+
+  SaleUser   SaleUser @relation(fields: [saleUserId], references: [id], onDelete: Cascade)
+  saleUserId String
+
+  createdAt DateTime @default(now())
+}
+
+model Lilami {
+  id       String @id @default(uuid())
+  dhitto   Dhitto @relation(fields: [dhittoId], references: [id])
+  dhittoId String @unique
+  rate     Float
+  image    String
+  remarks  String
+
+  date   DateTime @default(now())
+  bsDate String
+
+  createdAt DateTime @default(now())
+}

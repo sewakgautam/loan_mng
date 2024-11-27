@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "BankRecord" ADD COLUMN     "identity" SERIAL,
+ADD COLUMN     "updatedAt" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP;
